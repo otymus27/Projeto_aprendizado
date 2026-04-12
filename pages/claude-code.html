@@ -1,0 +1,491 @@
+<!-- HEADER -->
+    <header>
+      <div class="badge">Guia Completo</div>
+      <h1>Claude Code — Manual do Iniciante - CRIADO POR FABIO ROCHA</h1>
+      <p>Tudo que você precisa saber para trabalhar de forma produtiva com o Claude Code: arquivos, comandos, organização e boas práticas.</p>
+    </header>
+
+    <div class="wrapper">
+
+  <!-- ── SEÇÃO 1: ARQUIVOS PRINCIPAIS ── -->
+  <section id="arquivos">
+    <div class="section-header">
+      <div class="section-icon icon-purple">📁</div>
+      <h2>Arquivos Principais</h2>
+    </div>
+    <div class="cards">
+
+      <div class="card">
+        <div class="card-title"><span class="tag purple">CLAUDE.md</span></div>
+        <p class="card-desc">O arquivo mais importante. Define instruções, contexto do projeto, convenções de código e regras para o Claude seguir durante toda a sessão. Criado na raiz do projeto.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="tag purple">~/.claude/settings.json</span></div>
+        <p class="card-desc">Configurações globais do Claude Code. Controla permissões, hooks automáticos, modo de permissão padrão e outras preferências do ambiente.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="tag purple">.claude/settings.json</span></div>
+        <p class="card-desc">Configurações locais do projeto (por repositório). Permite sobrescrever as configurações globais para um projeto específico.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="tag teal">MEMORY.md</span></div>
+        <p class="card-desc">Índice de memórias persistentes do Claude. Fica em <code>~/.claude/projects/&lt;projeto&gt;/memory/MEMORY.md</code>. O Claude lê isso no início de cada conversa.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="tag teal">*.md (memórias)</span></div>
+        <p class="card-desc">Arquivos individuais de memória (user, feedback, project, reference). Ficam na pasta <code>memory/</code> e são apontados pelo MEMORY.md.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="tag orange">~/.claude/keybindings.json</span></div>
+        <p class="card-desc">Atalhos de teclado personalizados. Permite redefinir teclas como Enter, Shift+Enter, e criar combinações em chord (sequência de teclas).</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 2: COMANDOS ── -->
+  <section id="comandos">
+    <div class="section-header">
+      <div class="section-icon icon-teal">⌨️</div>
+      <h2>Comandos Slash</h2>
+    </div>
+    <p style="color:var(--muted); margin-bottom:20px; font-size:14px;">Digite estes comandos diretamente no chat do Claude Code. Alguns são built-in, outros são <em>skills</em> (extensões).</p>
+
+    <div class="cmd-list">
+
+      <div class="cmd-row">
+        <div class="cmd-name">/help</div>
+        <div class="cmd-info">
+          <strong>Ajuda Geral</strong>
+          <span>Lista todos os comandos disponíveis, atalhos e dicas de uso do Claude Code.</span>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-name">/clear</div>
+        <div class="cmd-info">
+          <strong>Limpar Contexto</strong>
+          <span>Reinicia a conversa atual sem perder as memórias persistentes. Útil ao trocar de tarefa.</span>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-name">/compact</div>
+        <div class="cmd-info">
+          <strong>Compactar Contexto</strong>
+          <span>Resume o histórico da conversa para liberar espaço de contexto sem perder o fio da meada.</span>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-name">/commit</div>
+        <div class="cmd-info">
+          <strong>Criar Commit (skill)</strong>
+          <span>Analisa as mudanças staged, gera uma mensagem de commit descritiva e realiza o commit.</span>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-name">/review-pr</div>
+        <div class="cmd-info">
+          <strong>Revisar Pull Request (skill)</strong>
+          <span>Revisa um PR existente no GitHub, listando problemas, sugestões e pontos de atenção.</span>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-name">/fast</div>
+        <div class="cmd-info">
+          <strong>Modo Rápido</strong>
+          <span>Alterna o modo de saída rápida. Usa o mesmo modelo, mas otimiza para velocidade de resposta.</span>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-name">/schedule</div>
+        <div class="cmd-info">
+          <strong>Agendar Tarefas (skill)</strong>
+          <span>Cria, lista ou executa agentes remotos agendados com cron. Automação de tarefas recorrentes.</span>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-name">/loop [intervalo]</div>
+        <div class="cmd-info">
+          <strong>Repetição Periódica (skill)</strong>
+          <span>Executa um comando em intervalos regulares. Ex: <code>/loop 5m /commit</code> commita a cada 5 minutos.</span>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-name">/simplify</div>
+        <div class="cmd-info">
+          <strong>Simplificar Código (skill)</strong>
+          <span>Revisa o código alterado buscando reutilização, qualidade e eficiência, corrigindo os problemas encontrados.</span>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-name">/pdf</div>
+        <div class="cmd-info">
+          <strong>Manipular PDFs (skill)</strong>
+          <span>Lê, cria, combina, divide ou adiciona marcas d'água em arquivos PDF.</span>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-name">/xlsx</div>
+        <div class="cmd-info">
+          <strong>Planilhas Excel (skill)</strong>
+          <span>Abre, edita, cria ou corrige arquivos .xlsx, .xlsm e .csv.</span>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-name">/docx</div>
+        <div class="cmd-info">
+          <strong>Documentos Word (skill)</strong>
+          <span>Cria, lê ou edita arquivos .docx com formatação, tabelas e estilos profissionais.</span>
+        </div>
+      </div>
+
+      <div class="cmd-row">
+        <div class="cmd-name">/pptx</div>
+        <div class="cmd-info">
+          <strong>Apresentações PowerPoint (skill)</strong>
+          <span>Cria ou extrai conteúdo de arquivos .pptx (slides).</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 3: ORGANIZAÇÃO DE PASTAS ── -->
+  <section id="pastas">
+    <div class="section-header">
+      <div class="section-icon icon-orange">🗂️</div>
+      <h2>Organização de Pastas</h2>
+    </div>
+
+    <p style="color:var(--muted); margin-bottom:20px; font-size:14px;">Estrutura recomendada para um projeto com Claude Code.</p>
+
+    <div class="tree">
+<span class="tree-dir">meu-projeto/</span>
+├── <span class="tree-imp">CLAUDE.md</span>              <span class="tree-note">← instruções do projeto para o Claude</span>
+├── <span class="tree-dir">.claude/</span>               <span class="tree-note">← config local do projeto</span>
+│   └── <span class="tree-file">settings.json</span>      <span class="tree-note">← permissões e hooks do projeto</span>
+├── <span class="tree-dir">src/</span>                   <span class="tree-note">← código-fonte principal</span>
+│   ├── <span class="tree-dir">components/</span>
+│   ├── <span class="tree-dir">services/</span>
+│   └── <span class="tree-dir">utils/</span>
+├── <span class="tree-dir">tests/</span>                 <span class="tree-note">← testes automatizados</span>
+├── <span class="tree-dir">docs/</span>                  <span class="tree-note">← documentação (opcional)</span>
+└── <span class="tree-file">README.md</span>
+
+<span class="tree-note">─── Pastas globais do Claude Code ───</span>
+
+<span class="tree-dir">~/.claude/</span>
+├── <span class="tree-imp">settings.json</span>          <span class="tree-note">← config global (todos os projetos)</span>
+├── <span class="tree-file">keybindings.json</span>       <span class="tree-note">← atalhos personalizados</span>
+└── <span class="tree-dir">projects/</span>
+    └── <span class="tree-dir">&lt;caminho-do-projeto&gt;/</span>
+        └── <span class="tree-dir">memory/</span>
+            ├── <span class="tree-imp">MEMORY.md</span>      <span class="tree-note">← índice das memórias</span>
+            ├── <span class="tree-file">user_*.md</span>     <span class="tree-note">← quem é o usuário</span>
+            ├── <span class="tree-file">feedback_*.md</span> <span class="tree-note">← preferências e correções</span>
+            ├── <span class="tree-file">project_*.md</span>  <span class="tree-note">← contexto do projeto</span>
+            └── <span class="tree-file">reference_*.md</span><span class="tree-note">← links e recursos externos</span>
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 4: SISTEMA DE MEMÓRIA ── -->
+  <section id="memoria">
+    <div class="section-header">
+      <div class="section-icon icon-blue">🧠</div>
+      <h2>Sistema de Memória</h2>
+    </div>
+    <p style="color:var(--muted); margin-bottom:24px; font-size:14px;">O Claude Code possui memória persistente entre conversas. Há 4 tipos de memória — cada uma com propósito específico.</p>
+
+    <div class="mem-grid">
+      <div class="mem-card">
+        <div class="mem-type" style="color:#a78bfa;">user</div>
+        <p>Informações sobre <strong style="color:var(--text)">quem é o usuário</strong>: cargo, experiência, linguagens que domina, preferências de comunicação.</p>
+      </div>
+      <div class="mem-card">
+        <div class="mem-type" style="color:#56cfb2;">feedback</div>
+        <p>Correções e confirmações de abordagem. O que <strong style="color:var(--text)">não fazer</strong> e o que funcionou bem. Evita repetir erros.</p>
+      </div>
+      <div class="mem-card">
+        <div class="mem-type" style="color:#f4a261;">project</div>
+        <p>Contexto do projeto em andamento: <strong style="color:var(--text)">decisões, prazos, motivações</strong> por trás das tarefas. Inclui datas absolutas.</p>
+      </div>
+      <div class="mem-card">
+        <div class="mem-type" style="color:#7dd3fc;">reference</div>
+        <p>Links para <strong style="color:var(--text)">recursos externos</strong>: dashboards, boards de tarefas, canais Slack, docs específicos do projeto.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;">
+      <div class="tip">
+        <strong>Como pedir ao Claude para lembrar algo</strong>
+        "Claude, lembre-se que usamos PostgreSQL neste projeto, nunca SQLite." — o Claude vai salvar isso como memória de projeto automaticamente.
+      </div>
+      <div class="tip teal">
+        <strong>Como pedir ao Claude para esquecer algo</strong>
+        "Claude, esqueça o que você salvou sobre o prazo do projeto." — o Claude vai localizar e remover a memória correspondente.
+      </div>
+      <div class="tip orange">
+        <strong>O que NÃO é salvo em memória</strong>
+        Padrões de código, arquivos do projeto, histórico git, soluções de debug — essas coisas já estão no código. A memória é para o que <em>não está no código</em>.
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 5: CLAUDE.md ── -->
+  <section id="claude-md">
+    <div class="section-header">
+      <div class="section-icon icon-purple">📝</div>
+      <h2>O Arquivo CLAUDE.md</h2>
+    </div>
+    <p style="color:var(--muted); margin-bottom:20px; font-size:14px;">O <span class="inline-code">CLAUDE.md</span> é carregado automaticamente no início de toda conversa. É onde você define as regras permanentes do seu projeto.</p>
+
+    <pre><span class="comment"># CLAUDE.md — exemplo para projeto web</span>
+
+<span class="kw"># Contexto do Projeto</span>
+Sistema de gestão de clientes desenvolvido em Laravel + Vue 3.
+Banco de dados: PostgreSQL 15. Deploy na Render.
+
+<span class="kw"># Convenções de Código</span>
+- PHP: PSR-12, nomes em inglês, métodos em camelCase
+- Vue: Composition API (não Options API), TypeScript
+- Commits: padrão Conventional Commits (feat/fix/docs/refactor)
+- Nunca usar console.log em produção
+
+<span class="kw"># Comandos Importantes</span>
+- Testes: <span class="str">php artisan test</span>
+- Dev local: <span class="str">npm run dev && php artisan serve</span>
+- Lint: <span class="str">./vendor/bin/pint && npm run lint</span>
+
+<span class="kw"># Regras</span>
+- Sempre perguntar antes de deletar arquivos
+- Não instalar pacotes sem aprovação
+- Manter migrations compatíveis com rollback
+- Não gerar arquivos README.md automaticamente</pre>
+
+    <div class="cards" style="margin-top:20px;">
+      <div class="card">
+        <div class="card-title">Onde criar</div>
+        <p class="card-desc">Na raiz do repositório (<span class="inline-code">./CLAUDE.md</span>). Também pode existir um global em <span class="inline-code">~/.claude/CLAUDE.md</span> para regras que valem para todos os projetos.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">O que incluir</div>
+        <p class="card-desc">Contexto do projeto, stack tecnológica, comandos de build/test, convenções de nomes, restrições de segurança e regras específicas da equipe.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">O que NÃO incluir</div>
+        <p class="card-desc">Código duplicado do projeto, senhas ou tokens (nunca!), informações que mudam frequentemente sem atualização correspondente.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 6: HOOKS ── -->
+  <section id="hooks">
+    <div class="section-header">
+      <div class="section-icon icon-red">🪝</div>
+      <h2>Hooks — Automação de Comportamentos</h2>
+    </div>
+    <p style="color:var(--muted); margin-bottom:20px; font-size:14px;">Hooks são comandos shell que executam automaticamente em resposta a eventos do Claude Code. Configurados em <span class="inline-code">.claude/settings.json</span>.</p>
+
+    <pre><span class="comment">// .claude/settings.json — exemplo de hooks</span>
+<span class="val">{</span>
+  <span class="str">"hooks"</span>: <span class="val">{</span>
+    <span class="comment">// executa ANTES de qualquer ferramenta ser usada</span>
+    <span class="str">"PreToolUse"</span>: [
+      <span class="val">{</span>
+        <span class="str">"matcher"</span>: <span class="str">"Bash"</span>,
+        <span class="str">"hooks"</span>: [<span class="val">{</span> <span class="str">"type"</span>: <span class="str">"command"</span>, <span class="str">"command"</span>: <span class="str">"echo Bash sobre to run"</span> <span class="val">}</span>]
+      <span class="val">}</span>
+    ],
+    <span class="comment">// executa APÓS qualquer ferramenta terminar</span>
+    <span class="str">"PostToolUse"</span>: [
+      <span class="val">{</span>
+        <span class="str">"matcher"</span>: <span class="str">"Write"</span>,
+        <span class="str">"hooks"</span>: [<span class="val">{</span> <span class="str">"type"</span>: <span class="str">"command"</span>, <span class="str">"command"</span>: <span class="str">"npm run lint -- --fix"</span> <span class="val">}</span>]
+      <span class="val">}</span>
+    ],
+    <span class="comment">// executa quando o usuário envia uma mensagem</span>
+    <span class="str">"UserPromptSubmit"</span>: []
+  <span class="val">}</span>
+<span class="val">}</span></pre>
+
+    <div class="cards" style="margin-top:20px;">
+      <div class="card">
+        <div class="card-title">PreToolUse</div>
+        <p class="card-desc">Executa antes de uma ferramenta ser usada. Pode bloquear a ferramenta retornando um código de saída não-zero. Útil para validações.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">PostToolUse</div>
+        <p class="card-desc">Executa após uma ferramenta completar. Ideal para rodar linters, formatadores ou testes automaticamente após edições de arquivo.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">UserPromptSubmit</div>
+        <p class="card-desc">Executa quando o usuário envia uma mensagem. Útil para logging, notificações ou preparar contexto adicional.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 7: BOAS PRÁTICAS ── -->
+  <section id="boas-praticas">
+    <div class="section-header">
+      <div class="section-icon icon-green">✅</div>
+      <h2>Boas Práticas</h2>
+    </div>
+
+    <div class="bp-list">
+
+      <div class="bp-item">
+        <div class="bp-num">1</div>
+        <div>
+          <h4>Sempre crie um CLAUDE.md antes de começar</h4>
+          <p>Documente o stack, convenções e restrições do projeto. Isso evita que o Claude tome decisões erradas por falta de contexto.</p>
+        </div>
+      </div>
+
+      <div class="bp-item">
+        <div class="bp-num">2</div>
+        <div>
+          <h4>Seja específico nas suas solicitações</h4>
+          <p>Em vez de "conserte o bug", diga "no arquivo <code>src/auth/login.js</code> linha 47, o token não está sendo validado corretamente quando o usuário usa OAuth". Contexto preciso = melhor resultado.</p>
+        </div>
+      </div>
+
+      <div class="bp-item">
+        <div class="bp-num">3</div>
+        <div>
+          <h4>Use /clear ao trocar de tarefa</h4>
+          <p>O contexto da conversa anterior pode confundir o Claude em tarefas não relacionadas. Limpar o contexto melhora o foco e a qualidade das respostas.</p>
+        </div>
+      </div>
+
+      <div class="bp-item">
+        <div class="bp-num">4</div>
+        <div>
+          <h4>Revise as mudanças antes de aprovar</h4>
+          <p>O Claude mostra as alterações para aprovação. Leia o diff antes de confirmar, especialmente para operações destrutivas (deletar arquivos, force push, reset).</p>
+        </div>
+      </div>
+
+      <div class="bp-item">
+        <div class="bp-num">5</div>
+        <div>
+          <h4>Nunca guarde segredos em CLAUDE.md</h4>
+          <p>Senhas, tokens, chaves de API — nada disso deve estar no CLAUDE.md ou em arquivos de memória. Use variáveis de ambiente e arquivos <code>.env</code> (no .gitignore).</p>
+        </div>
+      </div>
+
+      <div class="bp-item">
+        <div class="bp-num">6</div>
+        <div>
+          <h4>Peça planejamento antes de implementação complexa</h4>
+          <p>Para tarefas grandes, peça primeiro "me mostre um plano de como você faria isso" antes de pedir para implementar. Isso evita retrabalho em caso de discordância de abordagem.</p>
+        </div>
+      </div>
+
+      <div class="bp-item">
+        <div class="bp-num">7</div>
+        <div>
+          <h4>Mantenha o CLAUDE.md atualizado</h4>
+          <p>Quando o stack ou as convenções do projeto mudam, atualize o CLAUDE.md. Informações desatualizadas levam a sugestões erradas.</p>
+        </div>
+      </div>
+
+      <div class="bp-item">
+        <div class="bp-num">8</div>
+        <div>
+          <h4>Use o modo de permissão adequado</h4>
+          <p><strong>Default</strong>: pede aprovação para operações arriscadas. <strong>Auto-approve</strong>: para fluxos de trabalho rápidos onde você confia no Claude. Comece com Default até se familiarizar.</p>
+        </div>
+      </div>
+
+      <div class="bp-item">
+        <div class="bp-num">9</div>
+        <div>
+          <h4>Dê feedback quando algo estiver errado</h4>
+          <p>"Não, não faça assim porque..." ensina o Claude e ele salva isso como memória de feedback. Da próxima vez, ele lembrará da sua preferência automaticamente.</p>
+        </div>
+      </div>
+
+      <div class="bp-item">
+        <div class="bp-num">10</div>
+        <div>
+          <h4>Use agentes especializados para tarefas paralelas</h4>
+          <p>O Claude pode lançar sub-agentes para pesquisa, exploração de código e execução de tarefas em paralelo. Solicite isso explicitamente para tarefas independentes grandes.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SEÇÃO 8: DICAS RÁPIDAS ── -->
+  <section id="dicas">
+    <div class="section-header">
+      <div class="section-icon icon-teal">⚡</div>
+      <h2>Dicas Rápidas</h2>
+    </div>
+
+    <div class="tip">
+      <strong>Peça explicações no seu nível</strong>
+      "Explique isso como se eu fosse iniciante em Python" ou "Explique de forma técnica, já sei como funciona o framework." O Claude adapta a linguagem ao seu perfil.
+    </div>
+
+    <div class="tip teal">
+      <strong>Referencie arquivos pelo caminho completo</strong>
+      Em vez de "o arquivo de login", diga "<code>src/auth/LoginController.php</code>". Isso evita ambiguidade em projetos com muitos arquivos.
+    </div>
+
+    <div class="tip teal">
+      <strong>Use o formato arquivo:linha para navegar</strong>
+      O Claude retorna referências no formato <code>arquivo.py:42</code> — clicável direto no editor. Peça ao Claude para usar esse formato quando apontar problemas.
+    </div>
+
+    <div class="tip orange">
+      <strong>Para tarefas de segurança, forneça contexto claro</strong>
+      "Estou em um CTF", "estou fazendo pentest autorizado", "quero entender como esse ataque funciona para me defender." O contexto permite que o Claude ajude adequadamente.
+    </div>
+
+    <div class="tip orange">
+      <strong>Atalhos de teclado padrão no CLI</strong>
+      <br>
+      <span class="inline-code">Enter</span> → envia mensagem &nbsp;|&nbsp;
+      <span class="inline-code">Shift+Enter</span> → nova linha &nbsp;|&nbsp;
+      <span class="inline-code">Ctrl+C</span> → interrompe geração &nbsp;|&nbsp;
+      <span class="inline-code">Ctrl+R</span> → busca no histórico
+    </div>
+
+    <div class="tip">
+      <strong>O Claude pode abrir um navegador para você</strong>
+      Com o MCP Claude in Chrome habilitado, o Claude pode navegar em páginas web, preencher formulários e capturar screenshots durante a sessão.
+    </div>
+
+    <div class="tip">
+      <strong>Peça ao Claude para se identificar antes de agir</strong>
+      "Antes de editar qualquer arquivo, me diga quais arquivos você vai modificar e por quê." Isso ajuda a revisar a abordagem antes da execução.
+    </div>
+
+    <div class="tip teal">
+      <strong>Modos de permissão disponíveis</strong>
+      <br>
+      <span class="inline-code">default</span> → aprova caso a caso &nbsp;|&nbsp;
+      <span class="inline-code">acceptEdits</span> → auto-aprova edições &nbsp;|&nbsp;
+      <span class="inline-code">bypassPermissions</span> → aprova tudo (cuidado!)
+    </div>
+
+  </section>
+
+</div>
+
