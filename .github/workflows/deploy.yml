@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Código do GitHub
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Copiar arquivos para a VPS via SCP
         uses: appleboy/scp-action@v0.1.4
