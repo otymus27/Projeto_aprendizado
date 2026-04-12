@@ -75,28 +75,90 @@
       margin: 0 auto;
     }
 
-    /* ── NAV ── */
-    nav {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 40px;
+    /* ── LAYOUT PRINCIPAL ── */
+    .layout {
       display: flex;
-      gap: 0;
-      overflow-x: auto;
-      scrollbar-width: none;
+      min-height: 100vh;
     }
-    nav::-webkit-scrollbar { display: none; }
-    nav a {
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 280px;
+      flex-shrink: 0;
+      background: rgba(26, 29, 39, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-right: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      z-index: 10;
+    }
+    .sidebar::-webkit-scrollbar { width: 6px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    
+    .sidebar-logo {
+      padding: 32px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(46, 50, 80, 0.4);
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 10px;
+      display: grid; place-items: center;
+      font-weight: 800; color: #fff;
+      font-size: 16px;
+    }
+    .logo-text { font-weight: 700; font-size: 18px; letter-spacing: 0.5px; color: #fff; }
+    
+    .sidebar-nav {
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .sidebar-nav a {
       color: var(--muted);
       text-decoration: none;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 500;
-      padding: 14px 18px;
-      border-bottom: 2px solid transparent;
-      white-space: nowrap;
-      transition: color .2s, border-color .2s;
+      padding: 12px 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease;
     }
-    nav a:hover { color: var(--text); border-bottom-color: var(--accent); }
+    .sidebar-nav a .icon { font-size: 16px; transition: transform 0.2s ease; display: inline-block; }
+    .sidebar-nav a:hover {
+      background: rgba(124,106,247,0.1);
+      color: var(--text);
+      transform: translateX(4px);
+    }
+    .sidebar-nav a:hover .icon { transform: scale(1.1); }
+
+    .main-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Ocultar navegação lateral no celular */
+    @media (max-width: 900px) {
+      .layout { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+    }
 
     /* ── LAYOUT ── */
     .wrapper {
@@ -327,26 +389,36 @@
 </head>
 <body>
 
-<!-- HEADER -->
-<header>
-  <div class="badge">Guia Completo</div>
-  <h1>Claude Code — Manual do Iniciante - CRIADO POR FABIO ROCHA</h1>
-  <p>Tudo que você precisa saber para trabalhar de forma produtiva com o Claude Code: arquivos, comandos, organização e boas práticas.</p>
-</header>
+<!-- MAIN LAYOUT -->
+<div class="layout">
+  
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">CC</div>
+      <div class="logo-text">Claude Code</div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#arquivos"><span class="icon">📁</span>Arquivos Principais</a>
+      <a href="#comandos"><span class="icon">⌨️</span>Comandos</a>
+      <a href="#pastas"><span class="icon">🗂️</span>Organização de Pastas</a>
+      <a href="#memoria"><span class="icon">🧠</span>Sistema de Memória</a>
+      <a href="#claude-md"><span class="icon">📝</span>CLAUDE.md</a>
+      <a href="#hooks"><span class="icon">🪝</span>Hooks</a>
+      <a href="#boas-praticas"><span class="icon">✅</span>Boas Práticas</a>
+      <a href="#dicas"><span class="icon">⚡</span>Dicas Rápidas</a>
+    </nav>
+  </aside>
 
-<!-- NAV -->
-<nav>
-  <a href="#arquivos">Arquivos Principais</a>
-  <a href="#comandos">Comandos</a>
-  <a href="#pastas">Organização de Pastas</a>
-  <a href="#memoria">Sistema de Memória</a>
-  <a href="#claude-md">CLAUDE.md</a>
-  <a href="#hooks">Hooks</a>
-  <a href="#boas-praticas">Boas Práticas</a>
-  <a href="#dicas">Dicas Rápidas</a>
-</nav>
+  <main class="main-content">
+    <!-- HEADER -->
+    <header>
+      <div class="badge">Guia Completo</div>
+      <h1>Claude Code — Manual do Iniciante - CRIADO POR FABIO ROCHA</h1>
+      <p>Tudo que você precisa saber para trabalhar de forma produtiva com o Claude Code: arquivos, comandos, organização e boas práticas.</p>
+    </header>
 
-<div class="wrapper">
+    <div class="wrapper">
 
   <!-- ── SEÇÃO 1: ARQUIVOS PRINCIPAIS ── -->
   <section id="arquivos">
@@ -830,16 +902,18 @@ Banco de dados: PostgreSQL 15. Deploy na Render.
 
 </div>
 
-<!-- FOOTER -->
-<footer>
-  <p>Claude Code — Manual do Iniciante &nbsp;·&nbsp; Modelo: <strong>Claude Sonnet 4.6</strong></p>
-  <p style="margin-top:8px;">
-    Documentação oficial:
-    <a href="#">claude.ai/code</a> &nbsp;·&nbsp;
-    Reportar problemas:
-    <a href="#">github.com/anthropics/claude-code</a>
-  </p>
-</footer>
+    <!-- FOOTER -->
+    <footer>
+      <p>Claude Code — Manual do Iniciante &nbsp;·&nbsp; Modelo: <strong>Claude Sonnet 4.6</strong></p>
+      <p style="margin-top:8px;">
+        Documentação oficial:
+        <a href="#">claude.ai/code</a> &nbsp;·&nbsp;
+        Reportar problemas:
+        <a href="#">github.com/anthropics/claude-code</a>
+      </p>
+    </footer>
+  </main>
+</div>
 
 </body>
 </html>
