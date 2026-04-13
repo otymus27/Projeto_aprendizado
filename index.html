@@ -117,18 +117,27 @@
     }
     .logo-text { font-weight: 700; font-size: 18px; letter-spacing: 0.5px; color: #fff; }
     
+    .sidebar-category {
+      padding: 0 20px;
+      margin-top: 24px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+    }
     .sidebar-nav {
-      padding: 24px 16px;
+      padding: 8px 16px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
     }
     .sidebar-nav a {
       color: var(--muted);
       text-decoration: none;
       font-size: 14px;
       font-weight: 500;
-      padding: 12px 16px;
+      padding: 10px 16px;
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -136,12 +145,14 @@
       transition: all 0.2s ease;
     }
     .sidebar-nav a .icon { font-size: 16px; transition: transform 0.2s ease; display: inline-block; }
-    .sidebar-nav a:hover {
+    .sidebar-nav a:hover, .sidebar-nav a.active {
       background: rgba(124,106,247,0.1);
-      color: var(--text);
-      transform: translateX(4px);
+      color: var(--accent);
     }
-    .sidebar-nav a:hover .icon { transform: scale(1.1); }
+    .sidebar-nav a.active {
+      border-left: 3px solid var(--accent);
+      padding-left: 13px;
+    }
 
     .main-content {
       flex: 1;
@@ -160,248 +171,7 @@
       }
     }
 
-    /* ── LAYOUT ── */
-    .wrapper {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 48px 24px 80px;
-      display: flex;
-      flex-direction: column;
-      gap: 64px;
-    }
-
-    /* ── SECTION ── */
-    section { scroll-margin-top: 60px; }
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 28px;
-    }
-    .section-icon {
-      width: 40px; height: 40px;
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-    .icon-purple { background: rgba(124,106,247,.15); }
-    .icon-teal   { background: rgba(86,207,178,.15); }
-    .icon-orange { background: rgba(244,162,97,.15); }
-    .icon-red    { background: rgba(231,111,81,.15); }
-    .icon-blue   { background: rgba(99,179,237,.15); }
-    .icon-green  { background: rgba(72,187,120,.15); }
-
-    .section-header h2 {
-      font-size: 22px;
-      font-weight: 700;
-    }
-
-    /* ── CARDS ── */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
-    }
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      transition: border-color .2s, transform .2s;
-    }
-    .card:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-    }
-    .card-title {
-      font-weight: 600;
-      font-size: 14px;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .card-desc { color: var(--muted); font-size: 13px; line-height: 1.6; }
-    .tag {
-      display: inline-block;
-      background: var(--tag-bg);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-family: 'Consolas', 'Courier New', monospace;
-    }
-    .tag.purple { background: rgba(124,106,247,.15); border-color: rgba(124,106,247,.4); color: #a78bfa; }
-    .tag.teal   { background: rgba(86,207,178,.15);  border-color: rgba(86,207,178,.4);  color: #56cfb2; }
-    .tag.orange { background: rgba(244,162,97,.15);  border-color: rgba(244,162,97,.4);  color: #f4a261; }
-
-    /* ── CODE BLOCKS ── */
-    pre {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px 24px;
-      overflow-x: auto;
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 13px;
-      line-height: 1.8;
-    }
-    code { font-family: 'Consolas', 'Courier New', monospace; }
-    .inline-code {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 2px 7px;
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 13px;
-      color: #a78bfa;
-    }
-    .comment { color: #4a5568; }
-    .kw  { color: #a78bfa; }
-    .str { color: #56cfb2; }
-    .val { color: #f4a261; }
-    .cmd { color: #7dd3fc; }
-
-    /* ── COMMAND TABLE ── */
-    .cmd-list { display: flex; flex-direction: column; gap: 8px; }
-    .cmd-row {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 18px;
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      transition: border-color .2s;
-    }
-    .cmd-row:hover { border-color: rgba(124,106,247,.5); }
-    .cmd-name {
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 13px;
-      color: #7dd3fc;
-      background: rgba(125,211,252,.1);
-      border: 1px solid rgba(125,211,252,.2);
-      border-radius: 5px;
-      padding: 3px 10px;
-      white-space: nowrap;
-      flex-shrink: 0;
-      min-width: 160px;
-      text-align: center;
-    }
-    .cmd-info { flex: 1; }
-    .cmd-info strong { font-size: 13px; display: block; margin-bottom: 2px; }
-    .cmd-info span { color: var(--muted); font-size: 12px; }
-
-    /* ── FOLDER TREE ── */
-    .tree {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px 28px;
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 13px;
-      line-height: 2;
-    }
-    .tree-dir  { color: #7dd3fc; }
-    .tree-file { color: var(--text); }
-    .tree-note { color: #4a5568; }
-    .tree-imp  { color: #a78bfa; font-weight: 600; }
-
-    /* ── TIPS ── */
-    .tip {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
-      border-radius: 8px;
-      padding: 16px 20px;
-      margin-bottom: 12px;
-      font-size: 14px;
-    }
-    .tip.teal   { border-left-color: var(--accent2); }
-    .tip.orange { border-left-color: var(--accent3); }
-    .tip.red    { border-left-color: var(--accent4); }
-    .tip strong { display: block; margin-bottom: 4px; }
-
-    /* ── MEMORY GRID ── */
-    .mem-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
-    }
-    .mem-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px;
-    }
-    .mem-card .mem-type {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .mem-card p { color: var(--muted); font-size: 12px; line-height: 1.6; }
-
-    /* ── BEST PRACTICES ── */
-    .bp-list { display: flex; flex-direction: column; gap: 12px; }
-    .bp-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px 20px;
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-    }
-    .bp-num {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      background: rgba(124,106,247,.2);
-      border: 1px solid rgba(124,106,247,.4);
-      color: #a78bfa;
-      font-weight: 700;
-      font-size: 13px;
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-    }
-    .bp-item h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-    .bp-item p  { color: var(--muted); font-size: 13px; line-height: 1.6; }
-
-    /* ── FOOTER ── */
-    footer {
-      text-align: center;
-      border-top: 1px solid var(--border);
-      padding: 32px 24px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    footer a { color: var(--accent); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-
-    /* ── DIVIDER ── */
-    hr { border: none; border-top: 1px solid var(--border); margin: 0; }
-  
-    .sidebar-category {
-      padding: 0 20px;
-      margin-top: 16px;
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-    }
-    .sidebar-nav { padding-top: 6px; padding-bottom: 6px; }
-    .sidebar-nav a.active {
-      background: rgba(124,106,247,0.15);
-      color: var(--accent);
-      border-left: 3px solid var(--accent);
-      padding-left: 13px;
-    }
+    /* ── MARKDOWN BODY ── */
     .markdown-body {
       font-family: inherit;
       color: var(--text);
@@ -427,60 +197,92 @@
     .markdown-body pre { background: var(--code-bg); border: 1px solid var(--border); padding: 16px; border-radius: 8px; overflow-x: auto; margin-bottom: 20px; }
     .markdown-body code { font-family: 'Consolas', monospace; color: #a78bfa; background: rgba(167,139,250,0.1); padding: 2px 6px; border-radius: 4px; font-size: 14px; }
     .markdown-body pre code { background: transparent; padding: 0; color: #e2e8f0; }
-    </style>
+
+    footer {
+      text-align: center;
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
 </head>
 <body>
 
-<!-- MAIN LAYOUT -->
 <div class="layout">
-  
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
       <div class="logo-icon">CC</div>
-    <div class="sidebar-category">INTELIGÊNCIA ARTIFICIAL</div>
-    <nav class="sidebar-nav">
-      <a href="#/claude-code" class="active" onclick="highlightLink(this)"><span class="icon">🤖</span>Manual Claude Code</a>
-    </nav>
+      <div class="logo-text">Claude Code</div>
+    </div>
     
-    <div class="sidebar-category">DEVOPS</div>
-    <nav class="sidebar-nav">
-      <a href="#/devops/docker" onclick="highlightLink(this)"><span class="icon">🐳</span>Docker Básico</a>
-      <a href="#/devops/ubuntu" onclick="highlightLink(this)"><span class="icon">🐧</span>Guia Ubuntu/Linux</a>
-      <a href="#/devops/nginx" onclick="highlightLink(this)"><span class="icon">🌐</span>Manual do Nginx</a>
-      <a href="#/devops/vps-deploy" onclick="highlightLink(this)"><span class="icon">🚀</span>Deploy & SSL na VPS</a>
-    </nav>
-    
-    <div class="sidebar-category">FERRAMENTAS</div>
-    <nav class="sidebar-nav">
-      <a href="#/ferramentas/git" onclick="highlightLink(this)"><span class="icon">🐙</span>Git & GitHub</a>
-    </nav>
-    
-    <div class="sidebar-category">FULL STACK</div>
-    <nav class="sidebar-nav">
-      <a href="#/fullstack/roadmap" onclick="highlightLink(this)"><span class="icon">🗺️</span>Roadmap 2026</a>
-      <a href="#/fullstack/springboot" onclick="highlightLink(this)"><span class="icon">☕</span>Java Spring Boot</a>
-    </nav>
-    </aside>
+    <div id="sidebar-items">
+      <div class="sidebar-category">IA</div>
+      <nav class="sidebar-nav">
+        <a href="#/claude-code" class="active" onclick="highlightLink(this)"><span class="icon">🤖</span>Manual Claude Code</a>
+      </nav>
+      
+      <div class="sidebar-category">DEVOPS</div>
+      <nav class="sidebar-nav">
+        <a href="#/devops/docker" onclick="highlightLink(this)"><span class="icon">🐳</span>Docker Básico</a>
+        <a href="#/devops/ubuntu" onclick="highlightLink(this)"><span class="icon">🐧</span>Guia Ubuntu/Linux</a>
+        <a href="#/devops/nginx" onclick="highlightLink(this)"><span class="icon">🌐</span>Manual do Nginx</a>
+        <a href="#/devops/vps-deploy" onclick="highlightLink(this)"><span class="icon">🚀</span>Deploy & SSL na VPS</a>
+      </nav>
+      
+      <div class="sidebar-category">FERRAMENTAS</div>
+      <nav class="sidebar-nav">
+        <a href="#/ferramentas/git" onclick="highlightLink(this)"><span class="icon">🐙</span>Git & GitHub</a>
+      </nav>
+      
+      <div class="sidebar-category">FULL STACK</div>
+      <nav class="sidebar-nav">
+        <a href="#/fullstack/roadmap" onclick="highlightLink(this)"><span class="icon">🗺️</span>Roadmap 2026</a>
+        <a href="#/fullstack/springboot" onclick="highlightLink(this)"><span class="icon">☕</span>Java Spring Boot</a>
+      </nav>
+    </div>
+      <nav class="sidebar-nav">
+        <a href="#/claude-code" class="active" onclick="highlightLink(this)"><span class="icon">🤖</span>Manual Claude Code</a>
+      </nav>
+      
+      <div class="sidebar-category">DEVOPS</div>
+      <nav class="sidebar-nav">
+        <a href="#/devops/docker" onclick="highlightLink(this)"><span class="icon">🐳</span>Docker Básico</a>
+        <a href="#/devops/ubuntu" onclick="highlightLink(this)"><span class="icon">🐧</span>Guia Ubuntu/Linux</a>
+        <a href="#/devops/nginx" onclick="highlightLink(this)"><span class="icon">🌐</span>Manual do Nginx</a>
+        <a href="#/devops/vps-deploy" onclick="highlightLink(this)"><span class="icon">🚀</span>Deploy & SSL na VPS</a>
+      </nav>
+      
+      <div class="sidebar-category">FULL STACK</div>
+      <nav class="sidebar-nav">
+        <a href="#/fullstack/roadmap" onclick="highlightLink(this)"><span class="icon">🗺️</span>Roadmap 2026</a>
+        <a href="#/fullstack/springboot" onclick="highlightLink(this)"><span class="icon">☕</span>Java Spring Boot</a>
+      </nav>
+    </div>
+  </aside>
 
   <main class="main-content" id="content-area">
+    <!-- HEADER -->
+    <header>
+      <div class="badge">V1.0.0 — MANUAL DO INICIANTE</div>
+      <h1>Manual Claude Code</h1>
+      <p>Aprenda a dominar o CLI de IA mais poderoso da atualidade com este guia interativo.</p>
+    </header>
+
+    <div class="markdown-body">
+      <h2>Selecione um tópico no menu à esquerda para começar.</h2>
+    </div>
+
     <!-- FOOTER -->
     <footer>
       <p>Claude Code — Manual do Iniciante &nbsp;·&nbsp; Modelo: <strong>Claude Sonnet 4.6</strong></p>
-      <p style="margin-top:8px;">
-        Documentação oficial:
-        <a href="#">claude.ai/code</a> &nbsp;·&nbsp;
-        Reportar problemas:
-        <a href="#">github.com/anthropics/claude-code</a>
-      </p>
     </footer>
   </main>
 </div>
 
-
 <!-- Markdown Parser -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<!-- SPA Router -->
 <script src="app.js"></script>
 </body>
 </html>
