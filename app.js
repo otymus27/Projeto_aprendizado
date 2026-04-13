@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { href: '#/ferramentas/git',    icon: '🐙', title: 'Git & GitHub',          cat: 'Ferramentas',  desc: 'Versionamento, branches e pull requests' },
   { href: '#/fullstack/roadmap',  icon: '🗺️', title: 'Roadmap 2026',         cat: 'Full Stack',   desc: 'Trilha de aprendizado para devs full stack' },
   { href: '#/fullstack/springboot',icon: '☕', title: 'Java Spring Boot',     cat: 'Full Stack',   desc: 'APIs REST com Spring Boot e JPA' },
+  { href: '#/fullstack/angular',   icon: '🅰️', title: 'Angular',              cat: 'Full Stack',   desc: 'Framework frontend da Google para SPAs corporativas' },
 ];
 
 // ── DOM refs ───────────────────────────────────────────────────────────────
