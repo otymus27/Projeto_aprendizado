@@ -8,7 +8,13 @@ const NAV_ITEMS = [
   { href: '#/ferramentas/git',    icon: '🐙', title: 'Git & GitHub',          cat: 'Ferramentas',  desc: 'Versionamento, branches e pull requests' },
   { href: '#/fullstack/roadmap',  icon: '🗺️', title: 'Roadmap 2026',         cat: 'Full Stack',   desc: 'Trilha de aprendizado para devs full stack' },
   { href: '#/fullstack/springboot',icon: '☕', title: 'Java Spring Boot',     cat: 'Full Stack',   desc: 'APIs REST com Spring Boot e JPA' },
-  { href: '#/fullstack/angular',   icon: '🅰️', title: 'Angular',              cat: 'Full Stack',   desc: 'Framework frontend da Google para SPAs corporativas' },
+  { href: '#/fullstack/angular',                  icon: '🅰️', title: 'Angular',               cat: 'Full Stack',      desc: 'Framework frontend da Google para SPAs corporativas' },
+  { href: '#/versionamento/01-git',               icon: '🌿', title: 'Git',                   cat: 'Versionamento',   desc: 'Controle de versão distribuído do zero ao avançado' },
+  { href: '#/versionamento/02-github',            icon: '🐱', title: 'GitHub',                cat: 'Versionamento',   desc: 'Plataforma de colaboração, PRs, Issues e Releases' },
+  { href: '#/versionamento/03-github-actions',    icon: '⚙️', title: 'GitHub Actions',        cat: 'Versionamento',   desc: 'Automação de CI/CD nativa do GitHub' },
+  { href: '#/versionamento/04-fluxos-profissionais', icon: '🔄', title: 'Fluxos Profissionais', cat: 'Versionamento', desc: 'Git Flow, GitHub Flow, Conventional Commits e SemVer' },
+  { href: '#/versionamento/05-ci-cd-angular',     icon: '🅰️', title: 'CI/CD Angular',         cat: 'Versionamento',   desc: 'Pipeline completa de build, teste e deploy para Angular' },
+  { href: '#/versionamento/06-ci-cd-spring-boot', icon: '☕', title: 'CI/CD Spring Boot',     cat: 'Versionamento',   desc: 'Pipeline com Maven, Docker e deploy zero downtime' },
 ];
 
 // ── DOM refs ───────────────────────────────────────────────────────────────
