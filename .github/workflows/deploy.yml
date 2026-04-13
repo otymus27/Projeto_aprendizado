@@ -38,12 +38,15 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            # Carregar NVM diretamente (não depende de shell interativo)
+            # HOME pode estar vazio em shells não-interativos — ler do /etc/passwd
+            export HOME=$(getent passwd $(whoami) | cut -d: -f6)
+
+            # Carregar NVM
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-            # Garantir que o bin do node esteja no PATH
-            export PATH="$NVM_DIR/versions/node/$(node --version)/bin:$PATH"
+            # Validar se node foi carregado
+            node --version || { echo "ERRO: node não encontrado após NVM load"; exit 1; }
 
             # Navegar até o projeto
             cd ${{ secrets.VPS_TARGET_DIR }}
