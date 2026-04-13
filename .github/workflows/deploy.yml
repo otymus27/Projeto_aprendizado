@@ -12,6 +12,14 @@ jobs:
       - name: Checkout Código do GitHub
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Executar Processamento HTML (extract.js)
+        run: node extract.js
+
       - name: Copiar arquivos para a VPS via SCP
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -21,3 +29,15 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           source: "."
           target: "${{ secrets.VPS_TARGET_DIR }}"
+
+      - name: Reiniciar aplicação na VPS via SSH
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            cd ${{ secrets.VPS_TARGET_DIR }}
+            npm install
+            pm2 restart "projeto-aprendizado" || PORT=3000 pm2 start server.js --name "projeto-aprendizado"

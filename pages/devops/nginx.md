@@ -20,7 +20,7 @@ Muito usado para:
 Entrega arquivos puros HTML, CSS, JS e imagens direto do HD para o navegador de forma estupidamente rápida.
 
 ### Reverse Proxy (A Muralha)
-Recebe a requisição do cliente da internet no porto 80 e encaminha para outro serviço trancado internamente na porta 8080. O cliente nunca fura direto para sua aplicação.
+Recebe a requisição do cliente da internet no porto 80 e encaminha para outro serviço trancado internamente na porta da sua aplicação (ex: 3000 ou 8080). O cliente nunca fura direto para sua aplicação.
 
 ### Load Balancer
 Distribui milhares de caixas chegando entre múltiplos clones da aplicação rodando na máquina.
@@ -222,7 +222,7 @@ server {
     server_name api.exemplo.com;
 
     location / {
-        proxy_pass http://127.0.0.1:8080;
+        proxy_pass http://127.0.0.1:3000;   # Ajuste para a porta que sua aplicação está usando
         
         # Enviar identidade real do usúario pra dentro do Node.js, senão ele vai achar que toos os acessos vem de '127.0.0.1' na view dele.
         proxy_set_header Host $host;
@@ -401,7 +401,7 @@ http {
 
 - **403 Forbidden**: Nginx achou a pasta, mas no linux tá bloqueada pelo CHMOD sem permissão do App lê-la.
 - **404 Not Found**: Escreveu o caminho de rota (`root`) ou (`try_files`) fisicamente errado.
-- **502 Bad Gateway**: O Nginx funciona 100%, mas ao bater na porta 8080 local do backend, ninguem atendeu porta porque o backend seu Node Crashou, está com Erro ou desligado!
+- **502 Bad Gateway**: O Nginx funciona 100%, mas ao bater na porta local do backend (ex: 3000), ninguem atendeu porta porque o backend seu Node Crashou, está com Erro ou desligado!
 - **504 Gateway Timeout**: O backend atendeu, mas tá travado / infinitamente gerando relatório e passou de `60s`.
 
 ---

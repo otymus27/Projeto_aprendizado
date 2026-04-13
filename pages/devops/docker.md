@@ -533,7 +533,7 @@ docker system df -v                     # Detalhadíssimo
 
 ### "address already in use" ou "Porta 8080 já alocada"
 **Problema:** Você tentou ligar um container nginx mapeando o `-p 8080:80`, mas você JÁ tem um host excalidraw logado com o `8080` (Aconteceu com você hoje!)
-**Cura:** Encontre o culpado `netstat -tulpn` e/ou mude seu docker compose atual para `-p 8081:80`.
+**Cura:** Encontre o culpado `netstat -tulpn` e/ou mude seu docker compose atual para `-p 8082:80` ou `-p 3000:80`.
 
 ### "Container inicia, pisca e Some / Morre instantaneamente"
 **Cura:** Se um container de App for ligado sem variável obrigatória (ou se o banco falhar conexão e ele der loop error), ele fará Exit Code (1). Verifique o funeral pra ver quem apunhalhou pelas costas:
