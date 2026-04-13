@@ -5,17 +5,18 @@ const html = fs.readFileSync('index.html', 'utf8');
 const startTag = '<!-- HEADER -->';
 const endTag = '    <!-- FOOTER -->';
 
+// 1. Extração da página principal (opcional, se as tags existirem)
 const startIndex = html.indexOf(startTag);
 const endIndex = html.indexOf(endTag);
 
 if (startIndex !== -1 && endIndex !== -1) {
-    // Extrai o conteúdo que vai pro claude-code.html
     const extracted = html.substring(startIndex, endIndex);
     fs.writeFileSync('pages/claude-code.html', extracted);
     console.log('Extracted to pages/claude-code.html');
-    
-    // Substitui a Sidebar
-    const newSidebarLinks = `    <div class="sidebar-category">INTELIGÊNCIA ARTIFICIAL</div>
+}
+
+// 2. Atualização da Sidebar e Design System
+const newSidebarLinks = `    <div class="sidebar-category">INTELIGÊNCIA ARTIFICIAL</div>
     <nav class="sidebar-nav">
       <a href="#/claude-code" class="active" onclick="highlightLink(this)"><span class="icon">🤖</span>Manual Claude Code</a>
     </nav>
@@ -23,16 +24,26 @@ if (startIndex !== -1 && endIndex !== -1) {
     <div class="sidebar-category">DEVOPS</div>
     <nav class="sidebar-nav">
       <a href="#/devops/docker" onclick="highlightLink(this)"><span class="icon">🐳</span>Docker Básico</a>
+      <a href="#/devops/ubuntu" onclick="highlightLink(this)"><span class="icon">🐧</span>Guia Ubuntu/Linux</a>
+      <a href="#/devops/nginx" onclick="highlightLink(this)"><span class="icon">🌐</span>Manual do Nginx</a>
+      <a href="#/devops/vps-deploy" onclick="highlightLink(this)"><span class="icon">🚀</span>Deploy & SSL na VPS</a>
+    </nav>
+    
+    <div class="sidebar-category">FERRAMENTAS</div>
+    <nav class="sidebar-nav">
+      <a href="#/ferramentas/git" onclick="highlightLink(this)"><span class="icon">🐙</span>Git & GitHub</a>
     </nav>
     
     <div class="sidebar-category">FULL STACK</div>
     <nav class="sidebar-nav">
       <a href="#/fullstack/roadmap" onclick="highlightLink(this)"><span class="icon">🗺️</span>Roadmap 2026</a>
+      <a href="#/fullstack/springboot" onclick="highlightLink(this)"><span class="icon">☕</span>Java Spring Boot</a>
     </nav>`;
 
-    let newHtml = html.replace(/<nav class="sidebar-nav">[\s\S]*?<\/nav>/, newSidebarLinks);
-    
-    // Adiciona o CSS para sidebar-category no style
+let newHtml = html.replace(/(<div class="sidebar-logo">[\s\S]*?<\/div>)[\s\S]*?(<\/aside>)/, `$1\n${newSidebarLinks}\n    $2`);
+
+// Adiciona o CSS para sidebar-category no style se não estiver lá
+if (!newHtml.includes('.sidebar-category')) {
     newHtml = newHtml.replace('</style>', `
     .sidebar-category {
       padding: 0 20px;
@@ -76,15 +87,18 @@ if (startIndex !== -1 && endIndex !== -1) {
     .markdown-body code { font-family: 'Consolas', monospace; color: #a78bfa; background: rgba(167,139,250,0.1); padding: 2px 6px; border-radius: 4px; font-size: 14px; }
     .markdown-body pre code { background: transparent; padding: 0; color: #e2e8f0; }
     </style>`);
+}
 
-    // Remove o conteúdo do old index e coloca o id no main
-    const mainPos = newHtml.indexOf('<main class="main-content">');
-    if (mainPos !== -1) {
-        newHtml = newHtml.substring(0, mainPos) + '<main class="main-content" id="content-area">\n' + 
-                  newHtml.substring(newHtml.indexOf('    <!-- FOOTER -->'));
-    }
+// 3. Limpeza do corpo para o modo Shell
+const mainPos = newHtml.indexOf('<main class="main-content"');
+const footerMark = '    <!-- FOOTER -->';
+if (mainPos !== -1 && newHtml.includes(footerMark)) {
+    newHtml = newHtml.substring(0, mainPos) + '<main class="main-content" id="content-area">\n' + 
+              newHtml.substring(newHtml.indexOf(footerMark));
+}
 
-    // Add scripts just before </body>
+// 4. Scripts SPA
+if (!newHtml.includes('app.js')) {
     const scripts = `
 <!-- Markdown Parser -->
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -92,9 +106,7 @@ if (startIndex !== -1 && endIndex !== -1) {
 <script src="app.js"></script>
 </body>`;
     newHtml = newHtml.replace('</body>', scripts);
-
-    fs.writeFileSync('index.html', newHtml);
-    console.log('index.html updated successfully.');
-} else {
-    console.log('Tags not found');
 }
+
+fs.writeFileSync('index.html', newHtml);
+console.log('index.html updated successfully.');
