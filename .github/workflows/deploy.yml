@@ -38,13 +38,20 @@ jobs:
           password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
-            # Carregar perfil do usuário para garantir acesso ao npm/pm2
-            source $HOME/.profile || true
+            # Carregar NVM diretamente (não depende de shell interativo)
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            
-            # Navegar e reiniciar
+
+            # Garantir que o bin do node esteja no PATH
+            export PATH="$NVM_DIR/versions/node/$(node --version)/bin:$PATH"
+
+            # Navegar até o projeto
             cd ${{ secrets.VPS_TARGET_DIR }}
-            npm install
-            pm2 restart "projeto-aprendizado" || PORT=3000 pm2 start server.js --name "projeto-aprendizado"
+
+            # Reiniciar ou iniciar a aplicação
+            if pm2 describe "projeto-aprendizado" > /dev/null 2>&1; then
+              pm2 restart "projeto-aprendizado" --update-env
+            else
+              PORT=3000 pm2 start server.js --name "projeto-aprendizado"
+            fi
             pm2 save
