@@ -1,0 +1,12 @@
+{
+  "name": "projeto-aprendizado",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "extract": "node extract.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
