@@ -32,17 +32,30 @@ const server = http.createServer((req, res) => {
     fs.readFile(filePath, (error, content) => {
         if (error) {
             if (error.code === 'ENOENT') {
-                // If it's a sub-route in a SPA, we should return index.html
-                // But this is a simple static server. Let's return index.html for unknown paths to support the hash routing better if needed, 
-                // though for hash routing the browser doesn't send the hash to the server.
-                fs.readFile('./index.html', (err, indexContent) => {
-                    res.writeHead(200, { 'Content-Type': 'text/html' });
-                    res.end(indexContent, 'utf-8');
-                });
+                // Para arquivos estáticos (pages/, js, css, etc.) → retorna 404 real
+                // Só retorna index.html para rotas sem extensão (navegação SPA)
+                const hasExtension = path.extname(filePath) !== '';
+                const isPagesRequest = filePath.startsWith('./pages/');
+
+                if (hasExtension || isPagesRequest) {
+                    // Arquivo estático não encontrado → 404
+                    res.writeHead(404, { 'Content-Type': 'text/plain' });
+                    res.end('404 Not Found', 'utf-8');
+                } else {
+                    // Rota SPA sem extensão → serve index.html
+                    fs.readFile('./index.html', (err, indexContent) => {
+                        if (err) {
+                            res.writeHead(500);
+                            res.end('Server error');
+                            return;
+                        }
+                        res.writeHead(200, { 'Content-Type': 'text/html' });
+                        res.end(indexContent, 'utf-8');
+                    });
+                }
             } else {
                 res.writeHead(500);
                 res.end('Sorry, check with the site admin for error: ' + error.code + ' ..\n');
-                res.end();
             }
         } else {
             res.writeHead(200, { 'Content-Type': contentType });
