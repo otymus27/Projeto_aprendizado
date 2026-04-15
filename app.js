@@ -17,6 +17,9 @@ const NAV_ITEMS = [
   { href: '#/versionamento/06-ci-cd-spring-boot',  icon: '☕', title: 'CI/CD Spring Boot',     cat: 'Versionamento', desc: 'Pipeline com Maven, Docker e deploy zero downtime' },
 ];
 
+// ── Globals ────────────────────────────────────────────────────────────────
+let _currentRoute = null;
+
 // ── DOM refs ───────────────────────────────────────────────────────────────
 const contentArea = document.getElementById('content-area');
 const searchInput = document.getElementById('search-input');
@@ -99,6 +102,29 @@ function toggleTocGroup(btn) {
   btn.closest('.toc-group').classList.toggle('open');
 }
 
+// ── TOC: scroll para seção sem mudar a rota ────────────────────────────────
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Intercepta cliques em links #ancora dentro do conteúdo markdown ───────
+function interceptAnchorLinks(container) {
+  container.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const href = a.getAttribute('href');
+      // Só intercept links que são âncoras puras (não rotas)
+      // Rotas começam com #/ -- âncoras começam com # seguido de letra/número
+      if (href && href.startsWith('#') && !href.startsWith('#/')) {
+        e.preventDefault();
+        e.stopPropagation();
+        const targetId = href.slice(1);
+        scrollToSection(targetId);
+      }
+    });
+  });
+}
+
 // ── TOC: constrói e injeta o TOC após renderizar o conteúdo ───────────────
 function buildToc(container) {
   const headings = [...container.querySelectorAll('h2, h3')];
@@ -127,7 +153,7 @@ function buildToc(container) {
     const childrenHtml = hasChildren
       ? `<div class="toc-children">
            ${g.children.map(c =>
-             `<a class="toc-h3-link" href="#${c.id}">${c.text}</a>`
+             `<a class="toc-h3-link" href="javascript:void(0)" onclick="scrollToSection('${c.id}')">${c.text}</a>`
            ).join('')}
          </div>`
       : '';
@@ -141,7 +167,7 @@ function buildToc(container) {
     return `
       <div class="toc-group${hasChildren ? ' open' : ''}">
         <div class="toc-h2-row">
-          <a class="toc-h2-link" href="#${g.id}">${g.text}</a>
+          <a class="toc-h2-link" href="javascript:void(0)" onclick="scrollToSection('${g.id}')">${g.text}</a>
           ${toggleBtn}
         </div>
         ${childrenHtml}
@@ -158,9 +184,9 @@ function buildToc(container) {
 
   const mobileHtml = groups.map(g => {
     const children = g.children.map(c =>
-      `<a class="toc-mob-h3" href="#${c.id}">${c.text}</a>`
+      `<a class="toc-mob-h3" href="javascript:void(0)" onclick="scrollToSection('${c.id}')">${c.text}</a>`
     ).join('');
-    return `<a class="toc-mob-h2" href="#${g.id}">${g.text}</a>${children}`;
+    return `<a class="toc-mob-h2" href="javascript:void(0)" onclick="scrollToSection('${g.id}')">${g.text}</a>${children}`;
   }).join('');
 
   tocMobEl.innerHTML = `
@@ -187,13 +213,16 @@ function initScrollSpy() {
       if (!entry.isIntersecting) return;
       const id = entry.target.id;
 
-      // Highlight nos links do TOC
+      // Highlight nos links do TOC (agora compara pelo onclick)
       contentArea.querySelectorAll('.toc-h2-link, .toc-h3-link').forEach(a => {
-        a.classList.toggle('toc-active', a.getAttribute('href') === `#${id}`);
+        const onclickAttr = a.getAttribute('onclick') || '';
+        a.classList.toggle('toc-active', onclickAttr.includes(`'${id}'`));
       });
 
       // Auto-expandir o grupo pai se um H3 ficou ativo
-      const activeH3 = contentArea.querySelector(`.toc-h3-link[href="#${id}"]`);
+      const activeH3 = [...contentArea.querySelectorAll('.toc-h3-link')].find(a =>
+        (a.getAttribute('onclick') || '').includes(`'${id}'`)
+      );
       if (activeH3) {
         const group = activeH3.closest('.toc-group');
         if (group) group.classList.add('open');
@@ -240,10 +269,29 @@ function renderWelcome() {
 
 // ── Page loader ────────────────────────────────────────────────────────────
 async function loadPage() {
-  let hash = window.location.hash || '#/';
-  const route = hash.replace(/^#/, '') || '/';
+  const hash = window.location.hash || '#/';
+  const fullPath = hash.replace(/^#/, ''); // ex: "/devops/docker" ou "secao-id" (bare anchor)
+  const [route, anchor] = fullPath.split('#');
 
-  setActiveLink(hash);
+  // Caso: âncora pura sem rota (ex: a href="#titulo" dentro do markdown)
+  // O hash seria algo como "#secao-titulo" sem a barra inicial.
+  if (route && !route.startsWith('/')) {
+    // É uma âncora solta, não uma rota. Faz scroll sem recarregar.
+    scrollToSection(route);
+    return;
+  }
+
+  // Caso: mudança apenas de âncora na mesma rota
+  if (route === _currentRoute && route !== '/') {
+    if (anchor) {
+      const el = document.getElementById(anchor);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+    return;
+  }
+
+  _currentRoute = route;
+  setActiveLink('#' + route); // Destaca link da sidebar (sem âncora)
   closeSidebar();
 
   if (route === '/' || route === '') {
@@ -264,7 +312,7 @@ async function loadPage() {
       <div class="page-layout">
         <div class="page-content">
           <details class="toc-mobile"></details>
-          ${buildBreadcrumb(hash)}
+          ${buildBreadcrumb('#' + route)}
           <div class="markdown-body">${htmlContent}</div>
         </div>
         <aside class="toc-aside"></aside>
@@ -274,7 +322,17 @@ async function loadPage() {
     addHeadingIds(mdBody);
     buildToc(mdBody);
     initScrollSpy();
-    window.scrollTo(0, 0);
+    interceptAnchorLinks(mdBody); // Intercepta links #ancora do conteúdo
+
+    if (anchor) {
+      setTimeout(() => {
+        const el = document.getElementById(anchor);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      window.scrollTo(0, 0);
+    }
+
     setTimeout(() => { progressBar.style.transform = 'scaleX(0)'; }, 300);
   }
 
