@@ -256,96 +256,12 @@
     .card-name { font-size: 15px; font-weight: 700; color: #fff; }
     .card-desc { font-size: 13px; color: var(--muted); line-height: 1.45; }
 
-    /* ── PAGE LAYOUT (conteúdo + TOC) ───────────── */
+    /* ── PAGE LAYOUT ─────────────────────────── */
     .page-layout {
-      display: flex;
-      align-items: flex-start;
-      gap: 36px;
       padding: 44px 48px 80px;
-      max-width: 1200px;
+      max-width: 860px;
     }
-    .page-content { flex: 1; min-width: 0; }
-
-    /* ── TOC ASIDE (desktop) ──────────────────── */
-    .toc-aside {
-      width: 196px; flex-shrink: 0;
-      position: sticky;
-      top: calc(var(--nav-h) + 20px);
-      max-height: calc(100vh - var(--nav-h) - 40px);
-      overflow-y: auto;
-      border-left: 1px solid var(--border);
-      padding-left: 18px;
-    }
-    .toc-aside::-webkit-scrollbar { width: 3px; }
-    .toc-aside::-webkit-scrollbar-thumb { background: var(--border); }
-
-    .toc-label {
-      font-size: 10px; font-weight: 800; text-transform: uppercase;
-      letter-spacing: 1.3px; color: var(--muted); margin-bottom: 10px;
-    }
-    .toc-group { margin-bottom: 1px; }
-
-    .toc-h2-row { display: flex; align-items: center; gap: 2px; }
-    .toc-h2-link {
-      flex: 1; display: block; padding: 5px 4px;
-      color: var(--muted); text-decoration: none;
-      font-size: 12.5px; font-weight: 500; line-height: 1.4;
-      border-radius: 5px; transition: color 0.15s;
-    }
-    .toc-h2-link:hover { color: var(--text); }
-    .toc-h2-link.toc-active { color: var(--accent); font-weight: 600; }
-
-    .toc-toggle {
-      flex-shrink: 0; background: none; border: none;
-      color: var(--muted2); cursor: pointer;
-      width: 18px; height: 18px; display: grid; place-items: center;
-      font-size: 11px; border-radius: 4px; transition: all 0.15s;
-    }
-    .toc-toggle:hover { background: var(--surface2); color: var(--text); }
-    .toc-toggle .chv { display: inline-block; transition: transform 0.2s; }
-    .toc-group.open .toc-toggle .chv { transform: rotate(90deg); }
-
-    .toc-children {
-      padding-left: 8px; margin: 1px 0 3px 4px;
-      border-left: 1px solid var(--border);
-      display: none;
-    }
-    .toc-group.open .toc-children { display: block; }
-
-    .toc-h3-link {
-      display: block; padding: 3px 6px;
-      color: var(--muted); text-decoration: none;
-      font-size: 11.5px; line-height: 1.4;
-      border-radius: 4px; transition: color 0.15s;
-    }
-    .toc-h3-link:hover { color: var(--text); }
-    .toc-h3-link.toc-active { color: var(--accent); }
-
-    /* ── TOC MOBILE (painel inline colapsável) ── */
-    .toc-mobile {
-      display: none; background: var(--surface);
-      border: 1px solid var(--border); border-radius: 10px;
-      margin-bottom: 24px; overflow: hidden;
-    }
-    .toc-mobile summary {
-      padding: 11px 16px; cursor: pointer; list-style: none;
-      font-size: 13px; font-weight: 600; color: var(--text);
-      display: flex; align-items: center; gap: 8px; user-select: none;
-    }
-    .toc-mobile summary::-webkit-details-marker { display: none; }
-    .toc-mobile[open] summary { border-bottom: 1px solid var(--border); }
-    .toc-mob-nav { padding: 10px 16px; display: flex; flex-direction: column; gap: 2px; }
-    .toc-mob-h2 {
-      display: block; font-size: 13.5px; font-weight: 500;
-      color: var(--text); text-decoration: none;
-      padding: 4px 0; transition: color .15s;
-    }
-    .toc-mob-h3 {
-      display: block; font-size: 12.5px;
-      color: var(--muted); text-decoration: none;
-      padding: 3px 0 3px 14px; transition: color .15s;
-    }
-    .toc-mob-h2:hover, .toc-mob-h3:hover { color: var(--accent); }
+    .page-content { width: 100%; }
 
     /* ── MARKDOWN ─────────────────────────────── */
     .breadcrumb {
@@ -489,7 +405,7 @@
       #main { margin-left: 0; }
 
       .welcome { padding: 28px 20px 60px; }
-      .page-layout { padding: 28px 20px 60px; gap: 0; }
+      .page-layout { padding: 28px 20px 60px; }
       footer { padding: 20px; }
       .cards-grid { grid-template-columns: 1fr; }
 

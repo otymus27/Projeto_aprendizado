@@ -17,9 +17,6 @@ const NAV_ITEMS = [
   { href: '#/versionamento/06-ci-cd-spring-boot',  icon: '☕', title: 'CI/CD Spring Boot',     cat: 'Versionamento', desc: 'Pipeline com Maven, Docker e deploy zero downtime' },
 ];
 
-// ── Globals ────────────────────────────────────────────────────────────────
-let _currentRoute = null;
-
 // ── DOM refs ───────────────────────────────────────────────────────────────
 const contentArea = document.getElementById('content-area');
 const searchInput = document.getElementById('search-input');
@@ -66,179 +63,8 @@ function buildBreadcrumb(hash) {
     </nav>`;
 }
 
-// ── TOC: slugify heading text ──────────────────────────────────────────────
-const _usedIds = new Set();
-
-function slugify(text) {
-  return text
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')   // remove diacríticos (ã→a, é→e)
-    .replace(/[^\w\s-]/g, ' ')         // remove emojis e símbolos
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '') || 'section';
-}
-
-function uniqueId(base) {
-  let id = base;
-  let n = 2;
-  while (_usedIds.has(id)) id = `${base}-${n++}`;
-  _usedIds.add(id);
-  return id;
-}
-
-// ── TOC: adiciona IDs nas headings do markdown ─────────────────────────────
-function addHeadingIds(container) {
-  _usedIds.clear();
-  container.querySelectorAll('h2, h3').forEach(el => {
-    el.id = uniqueId(slugify(el.textContent));
-  });
-}
-
-// ── TOC: toggle grupo H2 retrátil ─────────────────────────────────────────
-function toggleTocGroup(btn) {
-  btn.closest('.toc-group').classList.toggle('open');
-}
-
-// ── TOC: scroll para seção sem mudar a rota ────────────────────────────────
-function scrollToSection(id) {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-// ── Intercepta cliques em links #ancora dentro do conteúdo markdown ───────
-function interceptAnchorLinks(container) {
-  container.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', (e) => {
-      const href = a.getAttribute('href');
-      // Só intercept links que são âncoras puras (não rotas)
-      // Rotas começam com #/ -- âncoras começam com # seguido de letra/número
-      if (href && href.startsWith('#') && !href.startsWith('#/')) {
-        e.preventDefault();
-        e.stopPropagation();
-        const targetId = href.slice(1);
-        scrollToSection(targetId);
-      }
-    });
-  });
-}
-
-// ── TOC: constrói e injeta o TOC após renderizar o conteúdo ───────────────
-function buildToc(container) {
-  const headings = [...container.querySelectorAll('h2, h3')];
-  if (headings.length < 3) return;  // páginas curtas não precisam de TOC
-
-  // Agrupa H2 com seus H3 filhos
-  const groups = [];
-  let current = null;
-
-  headings.forEach(el => {
-    if (el.tagName === 'H2') {
-      current = { id: el.id, text: el.textContent.trim(), children: [] };
-      groups.push(current);
-    } else if (current) {
-      current.children.push({ id: el.id, text: el.textContent.trim() });
-    }
-  });
-
-  // ── TOC Desktop (aside lateral) ──
-  const tocAsideEl = contentArea.querySelector('.toc-aside');
-  if (!tocAsideEl) return;
-
-  const desktopHtml = groups.map(g => {
-    const hasChildren = g.children.length > 0;
-
-    const childrenHtml = hasChildren
-      ? `<div class="toc-children">
-           ${g.children.map(c =>
-             `<a class="toc-h3-link" href="javascript:void(0)" onclick="scrollToSection('${c.id}')">${c.text}</a>`
-           ).join('')}
-         </div>`
-      : '';
-
-    const toggleBtn = hasChildren
-      ? `<button class="toc-toggle" onclick="toggleTocGroup(this)" title="Expandir/recolher">
-           <span class="chv">›</span>
-         </button>`
-      : '';
-
-    return `
-      <div class="toc-group${hasChildren ? ' open' : ''}">
-        <div class="toc-h2-row">
-          <a class="toc-h2-link" href="javascript:void(0)" onclick="scrollToSection('${g.id}')">${g.text}</a>
-          ${toggleBtn}
-        </div>
-        ${childrenHtml}
-      </div>`;
-  }).join('');
-
-  tocAsideEl.innerHTML = `
-    <p class="toc-label">Neste guia</p>
-    ${desktopHtml}`;
-
-  // ── TOC Mobile (details/summary inline) ──
-  const tocMobEl = contentArea.querySelector('.toc-mobile');
-  if (!tocMobEl) return;
-
-  const mobileHtml = groups.map(g => {
-    const children = g.children.map(c =>
-      `<a class="toc-mob-h3" href="javascript:void(0)" onclick="scrollToSection('${c.id}')">${c.text}</a>`
-    ).join('');
-    return `<a class="toc-mob-h2" href="javascript:void(0)" onclick="scrollToSection('${g.id}')">${g.text}</a>${children}`;
-  }).join('');
-
-  tocMobEl.innerHTML = `
-    <summary>📑 Neste guia</summary>
-    <nav class="toc-mob-nav">${mobileHtml}</nav>`;
-
-  // Fechar details ao clicar em um link
-  tocMobEl.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => tocMobEl.removeAttribute('open'));
-  });
-}
-
-// ── TOC: scroll spy ────────────────────────────────────────────────────────
-let _tocObserver = null;
-
-function initScrollSpy() {
-  if (_tocObserver) { _tocObserver.disconnect(); _tocObserver = null; }
-
-  const headings = [...contentArea.querySelectorAll('.markdown-body h2, .markdown-body h3')];
-  if (!headings.length) return;
-
-  _tocObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const id = entry.target.id;
-
-      // Highlight nos links do TOC (agora compara pelo onclick)
-      contentArea.querySelectorAll('.toc-h2-link, .toc-h3-link').forEach(a => {
-        const onclickAttr = a.getAttribute('onclick') || '';
-        a.classList.toggle('toc-active', onclickAttr.includes(`'${id}'`));
-      });
-
-      // Auto-expandir o grupo pai se um H3 ficou ativo
-      const activeH3 = [...contentArea.querySelectorAll('.toc-h3-link')].find(a =>
-        (a.getAttribute('onclick') || '').includes(`'${id}'`)
-      );
-      if (activeH3) {
-        const group = activeH3.closest('.toc-group');
-        if (group) group.classList.add('open');
-      }
-    });
-  }, {
-    rootMargin: '-62px 0px -55% 0px',
-    threshold: 0
-  });
-
-  headings.forEach(h => _tocObserver.observe(h));
-}
-
 // ── Welcome page ───────────────────────────────────────────────────────────
 function renderWelcome() {
-  if (_tocObserver) { _tocObserver.disconnect(); _tocObserver = null; }
   const cats = [...new Set(NAV_ITEMS.map(n => n.cat))];
 
   const sections = cats.map(cat => {
@@ -270,28 +96,14 @@ function renderWelcome() {
 // ── Page loader ────────────────────────────────────────────────────────────
 async function loadPage() {
   const hash = window.location.hash || '#/';
-  const fullPath = hash.replace(/^#/, ''); // ex: "/devops/docker" ou "secao-id" (bare anchor)
-  const [route, anchor] = fullPath.split('#');
 
-  // Caso: âncora pura sem rota (ex: a href="#titulo" dentro do markdown)
-  // O hash seria algo como "#secao-titulo" sem a barra inicial.
-  if (route && !route.startsWith('/')) {
-    // É uma âncora solta, não uma rota. Faz scroll sem recarregar.
-    scrollToSection(route);
-    return;
-  }
+  // Só processa rotas que começam com #/
+  // Âncoras soltas (ex: #secao) são ignoradas pelo router
+  if (!hash.startsWith('#/')) return;
 
-  // Caso: mudança apenas de âncora na mesma rota
-  if (route === _currentRoute && route !== '/') {
-    if (anchor) {
-      const el = document.getElementById(anchor);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }
-    return;
-  }
+  const route = hash.slice(1); // remove o '#', fica '/devops/docker'
 
-  _currentRoute = route;
-  setActiveLink('#' + route); // Destaca link da sidebar (sem âncora)
+  setActiveLink(hash);
   closeSidebar();
 
   if (route === '/' || route === '') {
@@ -306,33 +118,16 @@ async function loadPage() {
   const base = 'pages/' + route.replace(/^\//, '');
   progressBar.style.transform = 'scaleX(0.3)';
 
-  // Renderiza o conteúdo no layout de duas colunas com TOC
   function injectLayout(htmlContent) {
     contentArea.innerHTML = `
       <div class="page-layout">
         <div class="page-content">
-          <details class="toc-mobile"></details>
-          ${buildBreadcrumb('#' + route)}
+          ${buildBreadcrumb(hash)}
           <div class="markdown-body">${htmlContent}</div>
         </div>
-        <aside class="toc-aside"></aside>
       </div>`;
 
-    const mdBody = contentArea.querySelector('.markdown-body');
-    addHeadingIds(mdBody);
-    buildToc(mdBody);
-    initScrollSpy();
-    interceptAnchorLinks(mdBody); // Intercepta links #ancora do conteúdo
-
-    if (anchor) {
-      setTimeout(() => {
-        const el = document.getElementById(anchor);
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    } else {
-      window.scrollTo(0, 0);
-    }
-
+    window.scrollTo(0, 0);
     setTimeout(() => { progressBar.style.transform = 'scaleX(0)'; }, 300);
   }
 
